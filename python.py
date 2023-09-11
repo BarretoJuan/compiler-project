@@ -1,10 +1,8 @@
-# importing only  those functions 
-# which are needed
 from tkinter import * 
 from tkinter.ttk import * 
-from time import strftime
+from open_file import select_file
   
-# creating tkinter window
+#tkinter window
 root = Tk()
 root.title('Codificador EstudioVisual')
 
@@ -14,19 +12,21 @@ root.state("zoomed")
   
 # Creating Menubar
 menubar = Menu(root)
+
+
   
-# Adding File Menu and commands
+# File Menu
 file = Menu(menubar, tearoff = 0)
 menubar.add_cascade(label ='Archivo', menu = file)
 file.add_command(label ='Archivo Nuevo', command = None)
-file.add_command(label ='Abrir Archivo', command = None)
+file.add_command(label ='Abrir Archivo', command = select_file)
 file.add_command(label ='Guardar', command = None)
 file.add_command(label ='Guardar Como', command = None)
 
-# Adding Help Menu
-help_ = Menu(menubar, tearoff = 0)
-menubar.add_cascade(label ='Ayuda', menu = help_)
-help_.add_command(label ='Acerca de', command = None)
+# Help Menu
+help = Menu(menubar, tearoff = 0)
+menubar.add_cascade(label ='Ayuda', menu = help)
+help.add_command(label ='Acerca de', command = None)
   
 # display Menu
 root.config(menu = menubar)
