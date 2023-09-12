@@ -1,10 +1,11 @@
 from tkinter import * 
 from tkinter.ttk import * 
-from open_file import select_file
+from open_file import *
   
 #tkinter window
 root = Tk()
-root.title('Codificador EstudioVisual')
+
+root.title('Codificador EstudioVisual | Sin título')
 
 #setting window icon 
 root.iconbitmap("icon.ico")
@@ -30,4 +31,9 @@ help.add_command(label ='Acerca de', command = None)
   
 # display Menu
 root.config(menu = menubar)
+
+# Create a multiline text area (Text widget)
+text_area = Text(root, wrap=WORD, height=1000, width=1000)  # Adjust width and height as needed
+text_area.pack(pady=10, padx=10)  # Adjust pady as needed for spacing
+
 mainloop()
