@@ -23,9 +23,21 @@ def select_file():
             content = file.read()
     text_area.delete(1.0, END) 
     text_area.insert(INSERT, content)
+    text_area.get(1.0, END)
+    print("hola "+ str(text_area.get(1.0, END)))
     #update main window title
     root.title('Codificador EstudioVisual | '+ str(file_path))
-  
+
+#save file function
+def save_file():
+    global file_path
+
+    #text file writing to save contents
+    if file_path:
+        with open(file_path, 'w') as file:
+            content = text_area.get(1.0, END)
+            file.write(content)
+                 
 #tkinter window
 root = Tk()
 root.title('Codificador EstudioVisual | Sin título' if not file_path else 'Codificador EstudioVisual | '+ str(file_path))
@@ -44,7 +56,7 @@ file = Menu(menubar, tearoff = 0)
 menubar.add_cascade(label ='Archivo', menu = file)
 file.add_command(label ='Archivo Nuevo', command = None)
 file.add_command(label ='Abrir Archivo', command = select_file)
-file.add_command(label ='Guardar', command = None)
+file.add_command(label ='Guardar', command = save_file)
 file.add_command(label ='Guardar Como', command = None)
 
 print(select_file)
@@ -59,5 +71,6 @@ root.config(menu = menubar)
 #multiline text area 
 text_area = Text(root, wrap=WORD, height=1000, width=1000) 
 text_area.pack(pady=10, padx=10) 
+text_area.get(1.0, END)
 
 root.mainloop()
