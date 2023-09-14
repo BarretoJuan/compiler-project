@@ -2,10 +2,6 @@ from tkinter import *
 from tkinter.ttk import * 
 import tkinter.filedialog
 
-#file path variable declaration
-global file_path 
-file_path = None
-
 #file selector function
 def select_file():
     #declare permitted filetypes (so far only .txt)
@@ -37,11 +33,14 @@ def save_file():
         with open(file_path, 'w') as file:
             content = text_area.get(1.0, END)
             file.write(content)
+
+#file path variable declaration
+global file_path 
+file_path = None
                  
 #tkinter window
 root = Tk()
 root.title('Codificador EstudioVisual | Sin título' if not file_path else 'Codificador EstudioVisual | '+ str(file_path))
-
 
 #setting window icon 
 root.iconbitmap("icon.ico")
