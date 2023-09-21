@@ -3,6 +3,34 @@ from tkinter import messagebox
 from tkinter.ttk import * 
 import tkinter.filedialog
 
+def check_file_last_mod():
+    with open(file_path, 'r') as file:
+        content = file.read()
+        text_in_editor = text_area.get(1.0, END)
+        if content != text_in_editor:
+            return True
+        else:
+            return False
+
+def check_file_last_mod_on_exit():
+    if file_path:
+        if check_file_last_mod():
+            if messagebox.askyesno("Salir", "¿Deseas guardar los cambios?"):
+                save_file()
+                root.destroy()
+            else:
+                root.destroy()
+        else:
+            root.destroy()
+    else:
+        if text_area.get(1.0, END) != "\n":
+            if messagebox.askyesno("Salir", "¿Deseas guardar los cambios?"):
+                save_file_as()
+                root.destroy()
+            else:
+                root.destroy()
+        else:
+            root.destroy()
 #create new file function
 def create_new_file():
     global file_path
@@ -37,9 +65,7 @@ def create_new_file():
 def select_file():
     #declare permitted filetypes (so far only .txt)
     global file_path
-    filetypes = (
-        [("Text files", "*.txt")] 
-    )
+    filetypes = ([("Text files", "*.txt")])
 
     #open file selector dialog
     file_path = tkinter.filedialog.askopenfilename(filetypes=filetypes)
@@ -60,7 +86,6 @@ def select_file():
 #save file function
 def save_file():
     global file_path
-
     #text file writing to save contents
     if file_path:
         with open(file_path, 'w') as file:
@@ -108,10 +133,8 @@ file_path = None
 #tkinter window
 root = Tk()
 root.title('Codificador EstudioVisual | Sin título' if not file_path else 'Codificador EstudioVisual | '+ str(file_path))
+root.protocol("WM_DELETE_WINDOW", check_file_last_mod_on_exit)
 
-#setting window icon 
-root.iconbitmap("icon.ico")
-root.state("zoomed")
   
 #creating Menubar
 menubar = Menu(root)
@@ -125,7 +148,6 @@ file.add_command(label ='Abrir Archivo', command = select_file)
 file.add_command(label ='Guardar', command = save_file)
 file.add_command(label ='Guardar Como', command = save_file_as)
 
-print(select_file)
 #help Menu
 help = Menu(menubar, tearoff = 0)
 menubar.add_cascade(label ='Ayuda', menu = help)
