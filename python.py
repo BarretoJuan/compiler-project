@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox 
 from tkinter.ttk import * 
 import tkinter.filedialog
+from platform import os
 
 def check_file_last_mod():
     with open(file_path, 'r') as file:
@@ -135,8 +136,13 @@ root = Tk()
 root.title('Codificador EstudioVisual | Sin título' if not file_path else 'Codificador EstudioVisual | '+ str(file_path))
 root.protocol("WM_DELETE_WINDOW", check_file_last_mod_on_exit)
 
+if os.name == 'nt':
+    #setting window icon 
+    root.iconbitmap("icon.ico")
+    root.state("zoomed")
+
   
-#creating Menubar
+#creating Menubar6
 menubar = Menu(root)
   
 #file Menu
