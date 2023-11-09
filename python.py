@@ -78,9 +78,9 @@ def select_file():
             file_found = True
 
     if file_found == True:
-        text_area.delete(1.0, END) 
-        text_area.insert(INSERT, content)
-        text_area.get(1.0, END)
+        text_area.delete(1.0, 'end') 
+        text_area.insert('insert', content)
+        text_area.get(1.0, 'end')
         #update main window title
         root.title('Codificador EstudioVisual | '+ str(file_path))
 
