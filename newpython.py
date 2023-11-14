@@ -1,7 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-from tkinter import Text
+from tkinter import ttk, filedialog, Text
 
 path = None
 
@@ -12,15 +10,19 @@ def create_tab():
 
     # Create a Text widget for text editing
     text_widget = Text(tab, undo=True)  # Enable undo functionality
-    #text_widget.configure(encoding = "utf-8") # Allow utf-8 encoding so having accents and non english letters won't break
     text_widget.pack(fill="both", expand=True)
 
-    wtf = notebook.index("end")
     # Bind Ctrl+Z and Ctrl+Y to undo and redo
     text_widget.bind("<Control-z>", lambda event: text_widget.edit_undo())
     text_widget.bind("<Control-y>", lambda event: text_widget.edit_redo())
-    return text_widget # This should return the widget so we can use it as a text area
+    return text_widget
 
+def update_path(event):
+    # Update the global path variable when a new tab is selected
+    global path
+    current_tab_index = notebook.index(notebook.select())
+    path = notebook.tab(current_tab_index, "text")
+    print("el path es "+path)
 
 def open_file():
     file_path = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
@@ -32,12 +34,11 @@ def open_file():
             file_name = file_path.split("/")[-1].split(".")[0]  # Extract the file name from the path
             text_widget = create_tab()
             text_widget.insert("1.0", content)
-            notebook.tab(notebook.index("end") - 1, text=file_name)  # Change the tab label to the file name
+            notebook.tab(notebook.index("end") - 1, text=file_path)  # Change the tab label to the full file path
         notebook.select(notebook.index("end") - 1)  # Switch to the newly created tab
-        
-
 
 def close_tab():
+    save_file()
     # Get the currently selected tab
     current_tab = notebook.select()
     # Close the currently selected tab
@@ -48,20 +49,25 @@ def save_file():
     global path
     # Get the currently selected tab index
     current_tab_index = notebook.index(notebook.select())
-    print("deberia ser un numero", current_tab_index)
     # Get the text widget from the currently selected tab
-    text_widget = notebook.winfo_children()[current_tab_index].winfo_children()[0] # yeah, just dont ask me
-    print("text mimimi", text_area)
+    text_widget = notebook.winfo_children()[current_tab_index].winfo_children()[0]
     
     # Text file writing to save contents
-    if path:
+    if path != 'Untitled':
         with open(path, 'w') as file:
             content = text_widget.get(1.0, "end")
             file.write(content)
+            notebook.tab(current_tab_index, text=path)
     else:
-        print("No file path specified.")
+        save_as()
 
 
+def save_as():
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+    if file_path:
+        global path
+        path = file_path
+        save_file()
 
 root = tk.Tk()
 root.title("Editor Estudio Visual")
@@ -71,30 +77,26 @@ root.state('zoomed')
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
+# Bind the <<NotebookTabChanged>> event to update the path when a new tab is selected
+notebook.bind("<<NotebookTabChanged>>", update_path)
+
 # Create the initial tab and bind the text_area created and bind it to a variable
-text_area  = create_tab()
+text_area = create_tab()
 
 # Create a menu
 menu = tk.Menu(root)
 root.config(menu=menu)
 
 # File menu
-file_menu = tk.Menu(menu, tearoff = 0)
+file_menu = tk.Menu(menu, tearoff=0)
 menu.add_cascade(label="Archivo", menu=file_menu)
-file_menu.add_command(label="Nueva Ventana", command= lambda: create_tab())
-file_menu.add_command(label="Cerrar Ventana", command= lambda: close_tab())
+file_menu.add_command(label="Nueva Ventana", command=lambda: create_tab())
+file_menu.add_command(label="Cerrar Ventana", command=lambda: close_tab())
 file_menu.add_command(label="Abrir Archivo", command=open_file)
 file_menu.add_command(label="Guardar", command=save_file)
-file_menu.add_command(label="Guardar Como", command="")
-
+file_menu.add_command(label="Guardar Como", command=save_as)
 
 file_menu.add_separator()
 file_menu.add_command(label="Terminar programa", command=root.quit)
 
-# compile_menu = tk.Menu(menu, tearoff=0)
-# menu.add_cascade(label="Compilación", menu=compile_menu)
-# compile_menu.add_command(label="Análisis Léxico", command="")
-
-
 root.mainloop()
-
