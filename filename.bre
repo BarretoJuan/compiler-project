@@ -1,4 +1,6 @@
 function addNumbers() {
-    vamoos = "holaaaa";
+    var vamoos = "holaaaa";
+    shouldntBeAnIdentificator = selkjdisjdosm
+    var chao = 8 / 2 + 8 *3
     return 1 + 2;
-}
+} 
