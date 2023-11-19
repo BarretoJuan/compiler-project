@@ -12,11 +12,11 @@ class Keyword(Enum):
     FOR = 'for'
     RETURN = 'return'
     VAR = 'var'
-
+    PRINT = 'print'
     @classmethod
     def parse(cls, text):
         for keyword in cls:
-            if text.startswith(keyword.value + ' '):  # Add a space after the keyword
+            if text.startswith(keyword.value):  # Add a space after the keyword
                 return keyword, text[len(keyword.value):].lstrip()
         return None, text
 
@@ -63,7 +63,8 @@ class StringLiteral(Enum):
 
     @classmethod
     def parse(cls, text):
-        match = re.match(r'\".*?\"', text)
+        match = re.match(r'\".*?\"|\'.*?\'', text) # matches"" or '' strings
+
         if match:
             return (cls.Value, match.group()), text[match.end():]
         return None, text
@@ -73,7 +74,16 @@ class Op(Enum):
     MINUS = '-'
     MULTIPLY = '*'
     DIVIDE = '/'
-    EQUALS = '='
+    EQUALS = '=',
+    EQUALS_EQUALS = '=='
+    GREATER_THAN = '>'
+    LESS_THAN = '<'
+    GREATER_THAN_OR_EQUAL = '>='
+    LESS_THAN_OR_EQUAL = '<='
+    NOT = '!'
+    NOT_EQUALS = '!='
+    AND = '&&'
+    OR = '||'
 
     @classmethod
     def parse(cls, text):
@@ -90,20 +100,12 @@ class TokenType(Enum):
     STRING = StringLiteral
     OP = Op
 
-class TokenType(Enum):
-    KEYWORD = Keyword
-    IDENTIFICATOR = Id
-    SYMBOL = Symbol
-    NUMBER = Number
-    STRING = StringLiteral
-    OP = Op
-
     @classmethod
     def parse(cls, text, last_keyword=None, unknown_tokens=[]):
         while text:
             for token_type in cls:
                 if token_type is cls.IDENTIFICATOR:
-                    if last_keyword not in {"function", "var"}:
+                    if last_keyword not in {"function", "var", 'while', 'if', 'else', 'for', 'return'}:
                         continue
                     else:
                         last_keyword = None  # Reset last_keyword after parsing an identifier
