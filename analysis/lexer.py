@@ -53,9 +53,9 @@ class Number(Enum):
 
     @classmethod
     def parse(cls, text):
-        match = re.match(r'\d+', text)
+        match = re.match(r'\d+(\.\d+)?', text)
         if match:
-            return (cls.Value, int(match.group())), text[match.end():]
+            return (cls.Value, float(match.group())), text[match.end():]
         return None, text
     
 class StringLiteral(Enum):
@@ -74,7 +74,7 @@ class Op(Enum):
     MINUS = '-'
     MULTIPLY = '*'
     DIVIDE = '/'
-    EQUALS = '=',
+    ASSIGN = '='
     EQUALS_EQUALS = '=='
     GREATER_THAN = '>'
     LESS_THAN = '<'
@@ -140,7 +140,5 @@ def parse(filepath):
             else:
                 break
     unknown_tokens = [token for token in unknown_tokens if token != '']
-    print("Tokens:", tokens)
-    print("Unrecognizable tokens:", unknown_tokens)
+    return tokens, unknown_tokens
 
-parse('filename.bre')
