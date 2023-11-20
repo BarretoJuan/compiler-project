@@ -1,5 +1,5 @@
-from lexer import parse
-from lexer import TokenType, Keyword, Symbol, Number, StringLiteral, Op, Id
+from analysis import lexer
+from analysis.lexer import TokenType, Keyword, Symbol, Number, StringLiteral, Op, Id, parse
 
 def generate_report(filepath):
     report = ''

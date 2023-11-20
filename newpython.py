@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, Text
-
+from tkinter import scrolledtext
+from analysis import generate_report
 path = None
 
 def create_tab():
@@ -25,7 +26,7 @@ def update_path(event):
     print("el path es "+path)
 
 def open_file():
-    file_path = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+    file_path = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ("Compiler Files","*.bre")])
     if file_path:
         global path
         path = file_path
@@ -63,11 +64,32 @@ def save_file():
 
 
 def save_as():
-    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ("Compiler Files","*.bre")])
     if file_path:
         global path
         path = file_path
         save_file()
+
+
+def lex_comp():
+    global path
+
+
+    if path != 'Untitled':
+        content = generate_report.generate_report(path)
+
+        # Create a new Tkinter window
+        window = tk.Tk()
+        window.title("Analisis Lexico de: " + path)
+
+        # Create a scrolled text widget to display the content
+        text_widget = scrolledtext.ScrolledText(window, wrap=tk.WORD, width=40, height=10)
+        text_widget.insert(tk.INSERT, content)
+        text_widget.pack(expand=True, fill=tk.BOTH)
+
+        # Run the Tkinter event loop
+        window.mainloop()
+
 
 root = tk.Tk()
 root.title("Editor Estudio Visual")
@@ -98,5 +120,9 @@ file_menu.add_command(label="Guardar Como", command=save_as)
 
 file_menu.add_separator()
 file_menu.add_command(label="Terminar programa", command=root.quit)
+
+comp_menu = tk.Menu(menu, tearoff=0)
+menu.add_cascade(label='Compilación', menu=comp_menu)
+comp_menu.add_command(label="Análisis Léxico", command=lambda: lex_comp())
 
 root.mainloop()
