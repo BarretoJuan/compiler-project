@@ -1,9 +1,9 @@
 function addNumbers() {
     var vamoos = "holaaaa";
-    shouldntBeAnIdentificator = selkjdisjdosm
-    var chao = 8 / 2 + 8 *3.4
+    shouldntBeAnIdentificator = selkjdisjdosm;
+    var chao = 8 / 2 + 8 *3.4;
     while i > 0 {
-        print('ayoo')
+        print('ayoo');
     }
     return 1 + 2;
 } 

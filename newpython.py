@@ -39,7 +39,6 @@ def open_file():
         notebook.select(notebook.index("end") - 1)  # Switch to the newly created tab
 
 def close_tab():
-    save_file()
     # Get the currently selected tab
     current_tab = notebook.select()
     # Close the currently selected tab
@@ -86,6 +85,8 @@ def lex_comp():
         text_widget = scrolledtext.ScrolledText(window, wrap=tk.WORD, width=40, height=10)
         text_widget.insert(tk.INSERT, content)
         text_widget.pack(expand=True, fill=tk.BOTH)
+        text_widget.configure(state='disabled')
+        window.state('zoomed')
 
         # Run the Tkinter event loop
         window.mainloop()
